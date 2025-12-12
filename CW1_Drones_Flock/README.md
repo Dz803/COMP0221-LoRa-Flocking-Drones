@@ -1,32 +1,39 @@
-# _Sample project_
+# ESP32 Secure LoRa Flocking Drones (COMP0221)
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+This directory contains the ESP32 firmware for **COMP0221 Coursework 1**, implementing a **secure real-time neighbour exchange and flocking control system** using **FreeRTOS** and **LoRa (SX1276)**.
 
-This is the simplest buildable example. The example is used by command `idf.py create-project`
-that copies the project to user specified path and set it's name. For more information follow the [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project)
+Each ESP32 node emulates an autonomous drone operating in a bounded 3D space. Nodes periodically broadcast authenticated state information over LoRa and update their motion using a distributed flocking controller derived exclusively from validated neighbour states.
 
+---
 
+## Features
 
-## How to use example
-We encourage the users to use the example as a template for the new projects.
-A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
+- **FreeRTOS real-time architecture**
+  - Physics integration at 50 Hz
+  - Flocking control loop at 10 Hz
+  - Periodic LoRa transmission with bounded jitter
+  - Continuous LoRa reception with strict validation
 
-## Example folder contents
+- **LoRa communication (SX1276)**
+  - Register-level SPI control
+  - Configured for low airtime (BW = 500 kHz, SF7)
+  - Hardware CRC, RSSI, and SNR measurement
 
-The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
+- **Security**
+  - AES-128 CMAC authentication (4-byte truncated tag)
+  - Timestamp-based replay protection
+  - Self-packet and team filtering
 
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
-files that provide set of directives and instructions describing the project's source files and targets
-(executable, library, or both). 
+- **Distributed flocking**
+  - Cohesion, alignment, and separation rules
+  - Explicit speed limits and collision avoidance
+  - Boundary reflection in a bounded 3D space
 
-Below is short explanation of remaining files in the project folder.
+- **Telemetry**
+  - MQTT output for external monitoring and evaluation
+  - Telemetry isolated from control and LoRa timing
 
-```
-├── CMakeLists.txt
-├── main
-│   ├── CMakeLists.txt
-│   └── main.c
-└── README.md                  This is the file you are currently reading
-```
-Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
-They are not used or needed when building with CMake and idf.py.
+---
+
+## Project Structure
+
